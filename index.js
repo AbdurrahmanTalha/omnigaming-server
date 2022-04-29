@@ -24,19 +24,32 @@ async function run() {
             const page = await cursor.toArray();
             res.send(page)
         })
+        app.get("/item/", async (req, res) => {
+            const query = {};
+            
+            const cursor = computerCollection.find(query);
+            const page = await cursor.toArray();
+            res.send(page)
+        })
         app.get('/item/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
             const item = await computerCollection.findOne(query);
             res.send(item);
         });
-        app.get("/item", async (req, res) => {
-            const query = {};
-            const cursor = computerCollection.find(query);
-            const page = await cursor.toArray();
-            res.send(page)
-        })
-
+        app.put('/item/:id', async (req, res) => {
+            const id = req.params.id;
+            const updatedQuantity = req.body;
+            const filter = { _id: ObjectId(id) };
+            const options = { upsert: true };
+            const updatedDoc = {
+                $set: {
+                    quantity: updatedQuantity.quantity
+                }
+            };
+            const result = await computerCollection.updateOne(filter, updatedDoc, options);
+            res.send(result);
+        });
     }
     finally {
 
