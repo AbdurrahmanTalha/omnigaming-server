@@ -1,5 +1,6 @@
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const express = require('express');
+const jwt = require('jsonwebtoken');
 const cors = require('cors');
 require('dotenv').config()
 const app = express();
@@ -17,6 +18,14 @@ async function run() {
     try {
         await client.connect()
         const computerCollection = client.db("Computers").collection("computer")
+
+        app.post("/login", async (req, res) => {
+            const user = req.body;
+            const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+                expiresIn: "1d"
+            })
+            res.send({ accessToken })
+        })
         app.get("/item/home", async (req, res) => {
             const query = {};
             const limit = 6;
@@ -25,11 +34,11 @@ async function run() {
             res.send(page)
         })
         app.get("/item/", async (req, res) => {
-            const query = {};
 
+            const query = {};
             const cursor = computerCollection.find(query);
-            const page = await cursor.toArray();
-            res.send(page)
+            const item = await cursor.toArray();
+            res.send(item)
         })
         app.get('/item/:id', async (req, res) => {
             const id = req.params.id;
@@ -53,8 +62,21 @@ async function run() {
         app.delete('/item/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
-            const result = await userCollection.deleteOne(query);
+            const result = await computerCollection.deleteOne(query);
             res.send(result);
+        })
+        app.post('/item', async (req, res) => {
+            const newItem = req.body;
+            const result = await computerCollection.insertOne(newItem);
+            res.send(result);
+        })
+        app.get('/myItem', async (req, res) => {
+            const email = req.query.email;
+            console.log(email)
+            const query = { email: email }
+            const cursor = computerCollection.find(query)
+            const item = await cursor.toArray()
+            res.send(item)
         })
     }
     finally {
