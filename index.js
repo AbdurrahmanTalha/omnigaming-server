@@ -26,7 +26,7 @@ async function run() {
         })
         app.get("/item/", async (req, res) => {
             const query = {};
-            
+
             const cursor = computerCollection.find(query);
             const page = await cursor.toArray();
             res.send(page)
@@ -50,6 +50,12 @@ async function run() {
             const result = await computerCollection.updateOne(filter, updatedDoc, options);
             res.send(result);
         });
+        app.delete('/item/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await userCollection.deleteOne(query);
+            res.send(result);
+        })
     }
     finally {
 
