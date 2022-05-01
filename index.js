@@ -109,9 +109,7 @@ run().catch(console.dir);
 app.get('/', (req, res) => {
     res.send("Running Genius Server")
 })
-app.get('/hero', (req, res) => {
-    res.send("server is running for heroku")
-})
+
 
 app.listen(port, () => {
     console.log(`Listening to ${port}`)
