@@ -40,7 +40,14 @@ async function run() {
                 expiresIn: '1d'
             });
             res.send({ accessToken });
-        })
+        }) 
+        app.post('/register', async (req, res) => {
+            const user = req.body;
+            const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+                expiresIn: '1d'
+            });
+            res.send({ accessToken });
+        }) 
         app.get("/item/home", async (req, res) => {
             const query = {};
             const limit = 6;
