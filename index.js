@@ -21,9 +21,10 @@ function verifyJWT(req, res, next) {
         if (err) {
             return res.status(403).send({ message: 'Forbidden access' });
         }
+        console.log('decoded', decoded);
         req.decoded = decoded;
+        next();
     })
-    next();
 }
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.6vswd.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
@@ -33,12 +34,12 @@ async function run() {
         await client.connect()
         const computerCollection = client.db("Computers").collection("computer")
 
-        app.post("/login", async (req, res) => {
+        app.post('/login', async (req, res) => {
             const user = req.body;
             const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-                expiresIn: "1d"
-            })
-            res.send({ accessToken })
+                expiresIn: '1d'
+            });
+            res.send({ accessToken });
         })
         app.get("/item/home", async (req, res) => {
             const query = {};
@@ -88,14 +89,13 @@ async function run() {
             const decodedEmail = req.decoded.email;
             const email = req.query.email;
             if (email === decodedEmail) {
-                console.log(email)
-                const query = { email: email }
-                const cursor = computerCollection.find(query)
-                const item = await cursor.toArray()
-                res.send(item)
+                const query = { email: email };
+                const cursor = computerCollection.find(query);
+                const item = await cursor.toArray();
+                res.send(item);
             }
             else {
-                res.status(403).send({ message: 'Forbidden Access'})
+                res.status(403).send({ message: 'forbidden access' })
             }
         })
     }
@@ -108,6 +108,9 @@ async function run() {
 run().catch(console.dir);
 app.get('/', (req, res) => {
     res.send("Running Genius Server")
+})
+app.get('/hero', (req, res) => {
+    res.send("server is running for heroku")
 })
 
 app.listen(port, () => {
