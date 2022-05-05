@@ -40,8 +40,8 @@ async function run() {
                 expiresIn: '1d'
             });
             res.send({ accessToken });
-        }) 
-        
+        })
+
         app.get("/item/home", async (req, res) => {
             const query = {};
             const limit = 6;
@@ -69,7 +69,8 @@ async function run() {
             const options = { upsert: true };
             const updatedDoc = {
                 $set: {
-                    quantity: updatedQuantity.quantity
+                    quantity: updatedQuantity.quantity,
+                    sold: updatedQuantity.sold
                 }
             };
             const result = await computerCollection.updateOne(filter, updatedDoc, options);
