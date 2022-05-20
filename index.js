@@ -40,7 +40,7 @@ async function run() {
                 expiresIn: '1d'
             });
             res.send({ accessToken });
-        })
+        })``
 
         app.get("/item/home", async (req, res) => {
             const query = {};
@@ -49,8 +49,7 @@ async function run() {
             const page = await cursor.toArray();
             res.send(page)
         })
-        app.get("/item/", async (req, res) => {
-
+        app.get("/item/", async (req, res) => { 
             const query = {};
             const cursor = computerCollection.find(query);
             const item = await cursor.toArray();
