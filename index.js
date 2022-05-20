@@ -40,7 +40,7 @@ async function run() {
                 expiresIn: '1d'
             });
             res.send({ accessToken });
-        })``
+        })
 
         app.get("/item/home", async (req, res) => {
             const query = {};
