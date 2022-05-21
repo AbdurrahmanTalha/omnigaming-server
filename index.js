@@ -111,7 +111,7 @@ app.get('/', (req, res) => {
     res.send("Running Omnigaming Server")
 })
 app.get('/heroku', (req, res) => {
-    res.send("heroku works ig")
+    res.send("heroku is running")
 })
 
 app.listen(port, () => {
