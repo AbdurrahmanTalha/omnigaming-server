@@ -27,7 +27,7 @@ function verifyJWT(req, res, next) {
     })
 }
 
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.6vswd.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.firyzrc.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 async function run() {
     try {
@@ -49,7 +49,7 @@ async function run() {
             const page = await cursor.toArray();
             res.send(page)
         })
-        app.get("/item/", async (req, res) => { 
+        app.get("/item/", async (req, res) => {
             const query = {};
             const cursor = computerCollection.find(query);
             const item = await cursor.toArray();
